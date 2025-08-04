@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arscil - Trang cá nhân</title>
+    <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1a0f2e 0%, #2d1b4e 25%, #0f0a1e 50%, #1e2a5a 75%, #0a0d1a 100%);
+            --secondary-gradient: linear-gradient(135deg, #2d1b4e 0%, #1a0f2e 50%, #1e2a5a 100%);
+            --accent-color: #6366f1;
+            --text-primary: #ffffff;
+            --text-secondary: #e2e8f0;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --shadow-xl: 0 35px 60px -12px rgba(0, 0, 0, 0.35);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Advanced Grid Layout */
+        .app-container {
+            display: grid;
+            grid-template-areas: 
+                "sidebar header"
+                "sidebar main";
+            grid-template-columns: 280px 1fr;
+            grid-template-rows: 80px 1fr;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Sidebar */
+        .sidebar {
+            grid-area: sidebar;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-right: 1px solid var(--glass-border);
+            padding: 2rem 1.5rem;
+            position: fixed;
+            width: 280px;
+            height: 100vh;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-link:hover::before {
+            left: 100%;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            transform: translateX(8px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .nav-icon {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Advanced Header */
+        .header {
+            grid-area: header;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            position: fixed;
+            left: 280px;
+            right: 0;
+            top: 0;
+            z-index: 999;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .action-btn {
+            padding: 0.5rem 1rem;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .action-btn:hover {
+            background: var(--secondary-gradient);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Language Toggle Button */
+        .language-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .language-toggle:hover {
+            background: var(--secondary-gradient);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .flag {
+            font-size: 1.2rem;
+        }
+
+        .lang-text {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Main Content Area */
+        .main-content {
+            grid-area: main;
+            margin-left: 280px;
+            margin-top: 80px;
+            padding: 2rem;
+            min-height: calc(100vh - 80px);
+        }
+
+        /* Advanced Card System */
+        .content-section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .content-section:nth-child(2) { animation-delay: 0.2s; }
+        .content-section:nth-child(3) { animation-delay: 0.4s; }
+        .content-section:nth-child(4) { animation-delay: 0.6s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--secondary-gradient);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: linear-gradient(135deg, rgba(45, 27, 78, 0.3) 0%, rgba(30, 42, 90, 0.3) 100%);
+            border-radius: 24px;
+            padding: 4rem;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-xl);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            animation: rotate 20s linear infinite;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(45deg, #60a5fa, #a855f7, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textShine 3s ease-in-out infinite alternate;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            background: var(--secondary-gradient);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .hero-cta:hover::before {
+            left: 100%;
+        }
+
+        .hero-cta:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-xl);
+        }
+
+        /* Advanced Grid Systems */
+        .grid-auto-fit {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .grid-masonry {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            grid-auto-rows: max-content;
+            gap: 2rem;
+        }
+
+        /* Interactive Cards */
+        .interactive-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .interactive-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .interactive-card:hover::before {
+            opacity: 1;
+        }
+
+        .interactive-card:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: var(--shadow-xl);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            color: var(--text-secondary);
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #60a5fa, #a855f7);
+            border-radius: 3px;
+            transition: width 1s ease-out;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s ease-in-out infinite;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 60px;
+            height: 60px;
+            background: var(--secondary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            text-decoration: none;
+            box-shadow: var(--shadow-xl);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.4);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes textShine {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-areas: 
+                    "header"
+                    "main";
+                grid-template-columns: 1fr;
+                grid-template-rows: 80px 1fr;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .header {
+                left: 0;
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .grid-auto-fit,
+            .grid-masonry {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Advanced Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-logo">
+                <div class="logo-icon">A</div>
+                <div class="logo-text">Arscil</div>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active">
+                        <span class="nav-icon">🏠</span>
+                        <span data-translate="nav-home">Trang chủ</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">
+                        <span class="nav-icon">👤</span>
+                        <span data-translate="nav-about">Giới thiệu</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">
+                        <span class="nav-icon">⚡</span>
+                        <span data-translate="nav-skills">Kỹ năng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">
+                        <span class="nav-icon">💼</span>
+                        <span data-translate="nav-projects">Dự án</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#experience" class="nav-link">
+                        <span class="nav-icon">📈</span>
+                        <span data-translate="nav-experience">Kinh nghiệm</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">
+                        <span class="nav-icon">📧</span>
+                        <span data-translate="nav-contact">Liên hệ</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Advanced Header -->
+        <header class="header">
+            <div class="header-title">Dashboard</div>
+            <div class="header-actions">
+                <button id="languageToggle" class="action-btn language-toggle">
+                    <span class="flag">🇻🇳</span>
+                    <span class="lang-text">VI</span>
+                </button>
+                <a href="#" class="action-btn" data-translate="btn-cv">CV Download</a>
+                <a href="#" class="action-btn" data-translate="btn-portfolio">Portfolio</a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Hero Section -->
+            <section id="home" class="content-section">
+                <div class="hero-section">
+                    <div class="hero-content">
+                        <h1 class="hero-title" data-translate="hero-title">Arscil Portfolio</h1>
+                        <p class="hero-subtitle" data-translate="hero-subtitle">
+                            Sinh viên ngành Hệ thống Thông tin tại VNU-UIT | 
+                            Đam mê phân tích dữ liệu và phát triển hệ thống
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">👤</div>
+                    <h2 class="section-title" data-translate="about-title">Giới thiệu về tôi</h2>
+                </div>
+                <div class="grid-auto-fit">
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎓</div>
+                            <h3 class="card-title" data-translate="education-title">Học vấn</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="edu-university">Đại học Công nghệ Thông tin - ĐHQG-HCM</strong></p>
+                            <p data-translate="edu-major">Ngành: Hệ thống Thông tin</p>
+                            <p data-translate="edu-year">Năm học: 2022 - 2026</p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 60%"></div>
+                                </div>
+                                <small data-translate="edu-progress">Tiến độ học tập: 60%</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">🎯</div>
+                            <h3 class="card-title" data-translate="career-title">Mục tiêu nghề nghiệp</h3>
+                        </div>
+                        <div class="card-content">
+                            <p data-translate="career-analyst">Trở thành một <strong>Data Analyst</strong> chuyên nghiệp</p>
+                            <p data-translate="career-expertise">Chuyên môn về phân tích dữ liệu và tối ưu hóa hệ thống</p>
+                            <p data-translate="career-contribute">Đóng góp vào sự phát triển công nghệ thông tin</p>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">💡</div>
+                            <h3 class="card-title" data-translate="passion-title">Đam mê</h3>
+                        </div>
+                        <div class="card-content">
+                            <p data-translate="passion-data">• Phân tích dữ liệu và Machine Learning</p>
+                            <p data-translate="passion-database">• Thiết kế và tối ưu hóa cơ sở dữ liệu</p>
+                            <p data-translate="passion-web">• Phát triển ứng dụng web hiện đại</p>
+                            <p data-translate="passion-research">• Nghiên cứu công nghệ mới</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">⚡</div>
+                    <h2 class="section-title" data-translate="skills-title">Kỹ năng chuyên môn</h2>
+                </div>
+                <div class="grid-auto-fit">
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📊</div>
+                            <h3 class="card-title">Data Analysis</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="skill-excel">Excel: Advanced formulas, Pivot Tables</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-sql">SQL: Query optimization, Database design</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-python">Python: Pandas, NumPy, Matplotlib</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-powerbi">Power BI: Dashboard creation, DAX</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">🗄️</div>
+                            <h3 class="card-title">Information Systems</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="skill-database">Database Design: ERD, Normalization</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 90%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-system">System Analysis: UML, Use Case</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-project">Project Management: Agile, Scrum</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 70%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">💻</div>
+                            <h3 class="card-title">Programming</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="skill-java">Java: OOP, Spring Framework</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-python2">Python: Django, Flask, Data Science</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 75%"></div>
+                                </div>
+                            </div>
+                            <p><strong data-translate="skill-web">Web Tech: HTML, CSS, JavaScript</strong></p>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 85%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">💼</div>
+                    <h2 class="section-title" data-translate="projects-title">Dự án học tập</h2>
+                </div>
+                <div class="grid-masonry">
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📚</div>
+                            <h3 class="card-title" data-translate="project1-title">Hệ thống Quản lý Thu Gom Rác Thải</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="project1-tech">Công nghệ: Java GUI, Oracle</strong></p>
+                            <p><strong data-translate="project1-desc">Mô tả: Phát triển hệ thống quản lý thu gom rác thải hoàn chỉnh với các chức năng:</strong></p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li data-translate="project1-feature1">Quản lý điểm thu gom và loại rác</li>
+                                <li data-translate="project1-feature2">Hệ thống đăng ký và theo dõi lịch thu gom</li>
+                                <li data-translate="project1-feature3">Báo cáo thống kê</li>
+                                <li data-translate="project1-feature4">Giao diện responsive</li>
+                            </ul>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%"></div>
+                                </div>
+                                <small data-translate="project1-progress">Tiến độ: Hoàn thành</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📈</div>
+                            <h3 class="card-title" data-translate="project2-title">Phân tích Dữ liệu Bán hàng (To be continued)</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="project2-tech">Công nghệ: Python, Pandas, Power BI, SQL Server</strong></p>
+                            <p><strong data-translate="project2-desc">Mô tả: Dự án phân tích dữ liệu bán hàng từ cửa hàng bán lẻ:</strong></p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li data-translate="project2-feature1">ETL process với Python</li>
+                                <li data-translate="project2-feature2">Dashboard tương tác trong Power BI</li>
+                                <li data-translate="project2-feature3">Phân tích xu hướng và dự báo</li>
+                                <li data-translate="project2-feature4">Insights cho chiến lược kinh doanh</li>
+                            </ul>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 50%"></div>
+                                </div>
+                                <small data-translate="project2-progress">Tiến độ: 90%</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">🗃️</div>
+                            <h3 class="card-title" data-translate="project3-title">Thiết kế Cơ sở Dữ liệu</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="project3-tech">Công nghệ: MySQL, ERD Tools, SQL</strong></p>
+                            <p><strong data-translate="project3-desc">Mô tả: Thiết kế và triển khai CSDL cho hệ thống quản lý sinh viên:</strong></p>
+                            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                                <li data-translate="project3-feature1">Phân tích yêu cầu hệ thống</li>
+                                <li data-translate="project3-feature2">Thiết kế ERD và chuẩn hóa</li>
+                                <li data-translate="project3-feature3">Tối ưu hóa truy vấn</li>
+                                <li data-translate="project3-feature4">Backup và recovery procedures</li>
+                            </ul>
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 100%"></div>
+                                </div>
+                                <small data-translate="project3-progress">Tiến độ: Hoàn thành</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Experience Section -->
+            <section id="experience" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">📈</div>
+                    <h2 class="section-title" data-translate="experience-title">Kinh nghiệm học tập</h2>
+                </div>
+                <div class="grid-auto-fit">
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">🏆</div>
+                            <h3 class="card-title" data-translate="achievements-title">Thành tích học tập</h3>
+                        </div>
+                        <div class="card-content">
+                            <p data-translate="gpa-text">• GPA: 3.3/4.0 (Học kỳ gần nhất)</p>
+                            <p data-translate="progress-text">• Hoàn thành 65% chương trình đại học</p>
+                            <p data-translate="workshop-text">• Tham gia các workshop về Data Science</p>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📖</div>
+                            <h3 class="card-title" data-translate="courses-title">Khóa học & Chứng chỉ</h3>
+                        </div>
+                        <div class="card-content">
+                            <p data-translate="course1-text">• Google Data Analytics Professional Certificate (Đang học)</p>
+                            <p data-translate="course2-text">• Microsoft Power BI Certification (Đang chuẩn bị)</p>
+                            <p data-translate="course3-text">• Coursera: SQL for Data Science</p>
+                            <p data-translate="course4-text">• FreeCodeCamp: Data Analysis with Python</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="content-section">
+                <div class="section-header">
+                    <div class="section-icon">📧</div>
+                    <h2 class="section-title" data-translate="contact-title">Liên hệ với tôi</h2>
+                </div>
+                <div class="grid-auto-fit">
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">✉️</div>
+                            <h3 class="card-title" data-translate="email-title">Email</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong data-translate="email-academic">Học tập:</strong> 23521685@gm.uit.edu.vn</p>
+                            <p><strong data-translate="email-personal">Cá nhân:</strong> trungpham23305@gmail.com</p>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📱</div>
+                            <h3 class="card-title" data-translate="social-title">Social Media</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>LinkedIn:</strong> https://www.linkedin.com/in/pham-trung-295926335</p>
+                            <p><strong>GitHub:</strong> https://github.com/Arscil</p>
+                            <p><strong>Facebook:</strong> https://www.facebook.com/pham.trung.454362</p>
+                        </div>
+                    </div>
+                    <div class="interactive-card">
+                        <div class="card-header">
+                            <div class="card-icon">📍</div>
+                            <h3 class="card-title" data-translate="address-title">Địa chỉ</h3>
+                        </div>
+                        <div class="card-content">
+                            <p><strong>Hiện tại:</strong> TP. Hồ Chí Minh</p>
+                            <p><strong>Trường:</strong> VNU-UIT, Quận Thủ Đức</p>
+                            <p><strong>Sẵn sàng:</strong> Remote work</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Floating Action Button -->
+    <a href="#home" class="fab">↑</a>
+
+    <script>
+        // Language Translation System
+        const translations = {
+            vi: {
+                'nav-home': 'Trang chủ',
+                'nav-about': 'Giới thiệu',
+                'nav-skills': 'Kỹ năng',
+                'nav-projects': 'Dự án',
+                'nav-experience': 'Kinh nghiệm',
+                'nav-contact': 'Liên hệ',
+                'btn-cv': 'CV Download',
+                'btn-portfolio': 'Portfolio',
+                'hero-title': 'Arscil Portfolio',
+                'hero-subtitle': 'Sinh viên ngành Hệ thống Thông tin tại VNU-UIT | Đam mê phân tích dữ liệu và phát triển hệ thống',
+                'about-title': 'Giới thiệu về tôi',
+                'skills-title': 'Kỹ năng chuyên môn',
+                'projects-title': 'Dự án học tập',
+                'experience-title': 'Kinh nghiệm học tập',
+                'contact-title': 'Liên hệ với tôi',
+                'education-title': 'Học vấn',
+                'career-title': 'Mục tiêu nghề nghiệp',
+                'passion-title': 'Đam mê',
+                'achievements-title': 'Thành tích học tập',
+                'courses-title': 'Khóa học & Chứng chỉ',
+                'email-title': 'Email',
+                'social-title': 'Social Media',
+                'address-title': 'Địa chỉ',
+                // Education content
+                'edu-university': 'Đại học Công nghệ Thông tin - ĐHQG-HCM',
+                'edu-major': 'Ngành: Hệ thống Thông tin',
+                'edu-year': 'Năm học: 2022 - 2026',
+                'edu-progress': 'Tiến độ học tập: 60%',
+                // Career content
+                'career-analyst': 'Trở thành một Data Analyst chuyên nghiệp',
+                'career-expertise': 'Chuyên môn về phân tích dữ liệu và tối ưu hóa hệ thống',
+                'career-contribute': 'Đóng góp vào sự phát triển công nghệ thông tin',
+                // Passion content
+                'passion-data': '• Phân tích dữ liệu và Machine Learning',
+                'passion-database': '• Thiết kế và tối ưu hóa cơ sở dữ liệu',
+                'passion-web': '• Phát triển ứng dụng web hiện đại',
+                'passion-research': '• Nghiên cứu công nghệ mới',
+                // Skills content
+                'skill-excel': 'Excel: Advanced formulas, Pivot Tables',
+                'skill-sql': 'SQL: Query optimization, Database design',
+                'skill-python': 'Python: Pandas, NumPy, Matplotlib',
+                'skill-powerbi': 'Power BI: Dashboard creation, DAX',
+                'skill-database': 'Database Design: ERD, Normalization',
+                'skill-system': 'System Analysis: UML, Use Case',
+                'skill-project': 'Project Management: Agile, Scrum',
+                'skill-java': 'Java: OOP, Spring Framework',
+                'skill-python2': 'Python: Django, Flask, Data Science',
+                'skill-web': 'Web Tech: HTML, CSS, JavaScript',
+                // Projects content
+                'project1-title': 'Hệ thống Quản lý Thu Gom Rác Thải',
+                'project1-tech': 'Công nghệ: Java GUI, Oracle',
+                'project1-desc': 'Mô tả: Phát triển hệ thống quản lý thu gom rác thải hoàn chỉnh với các chức năng:',
+                'project1-feature1': 'Quản lý điểm thu gom và loại rác',
+                'project1-feature2': 'Hệ thống đăng ký và theo dõi lịch thu gom',
+                'project1-feature3': 'Báo cáo thống kê',
+                'project1-feature4': 'Giao diện responsive',
+                'project1-progress': 'Tiến độ: Hoàn thành',
+                
+                'project2-title': 'Phân tích Dữ liệu Bán hàng (To be continued)',
+                'project2-tech': 'Công nghệ: Python, Pandas, Power BI, SQL Server',
+                'project2-desc': 'Mô tả: Dự án phân tích dữ liệu bán hàng từ cửa hàng bán lẻ:',
+                'project2-feature1': 'ETL process với Python',
+                'project2-feature2': 'Dashboard tương tác trong Power BI',
+                'project2-feature3': 'Phân tích xu hướng và dự báo',
+                'project2-feature4': 'Insights cho chiến lược kinh doanh',
+                'project2-progress': 'Tiến độ: 90%',
+                
+                'project3-title': 'Thiết kế Cơ sở Dữ liệu',
+                'project3-tech': 'Công nghệ: MySQL, ERD Tools, SQL',
+                'project3-desc': 'Mô tả: Thiết kế và triển khai CSDL cho hệ thống quản lý sinh viên:',
+                'project3-feature1': 'Phân tích yêu cầu hệ thống',
+                'project3-feature2': 'Thiết kế ERD và chuẩn hóa',
+                'project3-feature3': 'Tối ưu hóa truy vấn',
+                'project3-feature4': 'Backup và recovery procedures',
+                'project3-progress': 'Tiến độ: Hoàn thành',
+                
+                // Experience content
+                'achievements-title': 'Thành tích học tập',
+                'gpa-text': '• GPA: 3.3/4.0 (Học kỳ gần nhất)',
+                'progress-text': '• Hoàn thành 65% chương trình đại học',
+                'workshop-text': '• Tham gia các workshop về Data Science',
+                
+                'courses-title': 'Khóa học & Chứng chỉ',
+                'course1-text': '• Google Data Analytics Professional Certificate (Đang học)',
+                'course2-text': '• Microsoft Power BI Certification (Đang chuẩn bị)',
+                'course3-text': '• Coursera: SQL for Data Science',
+                'course4-text': '• FreeCodeCamp: Data Analysis with Python',
+                
+                // Contact content
+                'email-title': 'Email',
+                'email-academic': 'Học tập:',
+                'email-personal': 'Cá nhân:',
+                'social-title': 'Social Media',
+                'address-title': 'Địa chỉ'
+            },
+            en: {
+                'nav-home': 'Home',
+                'nav-about': 'About',
+                'nav-skills': 'Skills',
+                'nav-projects': 'Projects',
+                'nav-experience': 'Experience',
+                'nav-contact': 'Contact',
+                'btn-cv': 'CV Download',
+                'btn-portfolio': 'Portfolio',
+                'hero-title': 'Arscil Portfolio',
+                'hero-subtitle': 'Information Systems Student at VNU-UIT | Passionate about Data Analysis and System Development',
+                'about-title': 'About Me',
+                'skills-title': 'Professional Skills',
+                'projects-title': 'Academic Projects',
+                'experience-title': 'Academic Experience',
+                'contact-title': 'Contact Me',
+                'education-title': 'Education',
+                'career-title': 'Career Goals',
+                'passion-title': 'Passion',
+                'achievements-title': 'Academic Achievements',
+                'courses-title': 'Courses & Certifications',
+                'email-title': 'Email',
+                'social-title': 'Social Media',
+                'address-title': 'Address',
+                // Education content
+                'edu-university': 'University of Information Technology - VNU-HCM',
+                'edu-major': 'Major: Information Systems',
+                'edu-year': 'Academic Year: 2022 - 2026',
+                'edu-progress': 'Academic Progress: 60%',
+                // Career content
+                'career-analyst': 'Become a professional Data Analyst',
+                'career-expertise': 'Expertise in data analysis and system optimization',
+                'career-contribute': 'Contribute to information technology development',
+                // Passion content
+                'passion-data': '• Data Analysis and Machine Learning',
+                'passion-database': '• Database design and optimization',
+                'passion-web': '• Modern web application development',
+                'passion-research': '• New technology research',
+                // Skills content
+                'skill-excel': 'Excel: Advanced formulas, Pivot Tables',
+                'skill-sql': 'SQL: Query optimization, Database design',
+                'skill-python': 'Python: Pandas, NumPy, Matplotlib',
+                'skill-powerbi': 'Power BI: Dashboard creation, DAX',
+                'skill-database': 'Database Design: ERD, Normalization',
+                'skill-system': 'System Analysis: UML, Use Case',
+                'skill-project': 'Project Management: Agile, Scrum',
+                'skill-java': 'Java: OOP, Spring Framework',
+                'skill-python2': 'Python: Django, Flask, Data Science',
+                'skill-web': 'Web Tech: HTML, CSS, JavaScript',
+                // Projects content
+                'project1-title': 'Waste Collection Management System',
+                'project1-tech': 'Technology: Java GUI, Oracle',
+                'project1-desc': 'Description: Developed a complete waste collection management system with features:',
+                'project1-feature1': 'Collection point and waste type management',
+                'project1-feature2': 'Registration and collection schedule tracking system',
+                'project1-feature3': 'Statistical reporting',
+                'project1-feature4': 'Responsive interface',
+                'project1-progress': 'Progress: Completed',
+                'project2-title': 'Sales Data Analysis (To be continued)',
+                'project2-tech': 'Technology: Python, Pandas, Power BI, SQL Server',
+                'project2-desc': 'Description: Sales data analysis project from retail store:',
+                'project2-feature1': 'ETL process with Python',
+                'project2-feature2': 'Interactive dashboard in Power BI',
+                'project2-feature3': 'Trend analysis and forecasting',
+                'project2-feature4': 'Business strategy insights',
+                'project2-progress': 'Progress: 90%',
+                'project3-title': 'Database Design',
+                'project3-tech': 'Technology: MySQL, ERD Tools, SQL',
+                'project3-desc': 'Description: Design and implement database for student management system:',
+                'project3-feature1': 'System requirements analysis',
+                'project3-feature2': 'ERD design and normalization',
+                'project3-feature3': 'Query optimization',
+                'project3-feature4': 'Backup and recovery procedures',
+                'project3-progress': 'Progress: Completed',
+                // Experience content
+                'gpa-text': '• GPA: 3.3/4.0 (Latest semester)',
+                'progress-text': '• Completed 65% of university program',
+                'workshop-text': '• Participated in Data Science workshops',
+                'course1-text': '• Google Data Analytics Professional Certificate (In progress)',
+                'course2-text': '• Microsoft Power BI Certification (Preparing)',
+                'course3-text': '• Coursera: SQL for Data Science',
+                'course4-text': '• FreeCodeCamp: Data Analysis with Python',
+                // Contact content
+                'email-academic': 'Academic:',
+                'email-personal': 'Personal:',
+                'linkedin': 'LinkedIn: https://www.linkedin.com/in/pham-trung-295926335',
+                'github': 'GitHub: https://github.com/Arscil',
+                'facebook': 'Facebook: https://www.facebook.com/pham.trung.454362',
+                'address-current': 'Current: Ho Chi Minh City',  
+                'address-school': 'University: VNU-UIT, Thu Duc District',
+                'address-remote': 'Available: Remote work'
+            }
+        };
+
+        let currentLanguage = 'vi';
+
+        function translatePage(lang) {
+            const elements = document.querySelectorAll('[data-translate]');
+            elements.forEach(element => {
+                const key = element.getAttribute('data-translate');
+                if (translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            // Update language toggle button
+            const languageToggle = document.getElementById('languageToggle');
+            const flag = languageToggle.querySelector('.flag');
+            const langText = languageToggle.querySelector('.lang-text');
+            
+            if (lang === 'vi') {
+                flag.textContent = '🇻🇳';
+                langText.textContent = 'VI';
+            } else {
+                flag.textContent = '🇺🇸';
+                langText.textContent = 'EN';
+            }
+
+            currentLanguage = lang;
+            localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Advanced Navigation System
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('.content-section');
+            const sidebar = document.querySelector('.sidebar');
+            const languageToggle = document.getElementById('languageToggle');
+            
+            // Load saved language preference
+            const savedLanguage = localStorage.getItem('preferredLanguage') || 'vi';
+            translatePage(savedLanguage);
+            
+            // Language toggle functionality
+            languageToggle.addEventListener('click', function() {
+                const newLang = currentLanguage === 'vi' ? 'en' : 'vi';
+                translatePage(newLang);
+                
+                // Add animation effect
+                this.style.transform = 'scale(0.9)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+            
+            // Smooth scrolling with offset for fixed header
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        const offsetTop = targetSection.offsetTop - 100;
+                        window.scrollTo({
+                            top: offsetTop,
+                            behavior: 'smooth'
+                        });
+                    }
+                    
+                    // Update active nav link
+                    navLinks.forEach(nl => nl.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Advanced Intersection Observer for navigation
+            const observerOptions = {
+                threshold: 0.3,
+                rootMargin: '-100px 0px -60% 0px'
+            };
+            
+            const sectionObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const targetId = entry.target.getAttribute('id');
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href') === `#${targetId}`) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+            
+            sections.forEach(section => {
+                sectionObserver.observe(section);
+            });
+            
+            // Animate progress bars when in view
+            const progressBars = document.querySelectorAll('.progress-fill');
+            const progressObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const progressFill = entry.target;
+                        const width = progressFill.style.width;
+                        progressFill.style.width = '0%';
+                        setTimeout(() => {
+                            progressFill.style.width = width;
+                        }, 200);
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            progressBars.forEach(bar => {
+                progressObserver.observe(bar);
+            });
+            
+            // Advanced Card Interactions
+            const interactiveCards = document.querySelectorAll('.interactive-card');
+            
+            interactiveCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-10px) rotateX(5deg) rotateY(5deg)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
+                });
+                
+                // Add ripple effect on click
+                card.addEventListener('click', function(e) {
+                    const ripple = document.createElement('div');
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255, 255, 255, 0.3)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.pointerEvents = 'none';
+                    
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+            
+            // Floating Action Button behavior
+            const fab = document.querySelector('.fab');
+            let lastScrollY = window.scrollY;
+            
+            window.addEventListener('scroll', () => {
+                const currentScrollY = window.scrollY;
+                
+                if (currentScrollY > 300) {
+                    fab.style.opacity = '1';
+                    fab.style.transform = 'scale(1)';
+                } else {
+                    fab.style.opacity = '0';
+                    fab.style.transform = 'scale(0.8)';
+                }
+                
+                // Hide/show based on scroll direction
+                if (currentScrollY > lastScrollY && currentScrollY > 500) {
+                    fab.style.transform += ' translateY(100px)';
+                } else {
+                    fab.style.transform = fab.style.transform.replace(' translateY(100px)', '');
+                }
+                
+                lastScrollY = currentScrollY;
+            });
+            
+            // Parallax effect for hero section
+            const heroSection = document.querySelector('.hero-section');
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const rate = scrolled * -0.5;
+                if (heroSection) {
+                    heroSection.style.transform = `translateY(${rate}px)`;
+                }
+            });
+            
+            // Mobile sidebar toggle
+            if (window.innerWidth <= 1024) {
+                const header = document.querySelector('.header');
+                const hamburger = document.createElement('button');
+                hamburger.innerHTML = '☰';
+                hamburger.style.cssText = `
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 1.5rem;
+                    cursor: pointer;
+                    padding: 0.5rem;
+                `;
+                
+                header.insertBefore(hamburger, header.firstChild);
+                
+                hamburger.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+                
+                // Close sidebar when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!sidebar.contains(e.target) && !hamburger.contains(e.target)) {
+                        sidebar.classList.remove('active');
+                    }
+                });
+            }
+            
+            // Dynamic typing effect for hero title
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) {
+                const text = heroTitle.textContent;
+                heroTitle.textContent = '';
+                let i = 0;
+                
+                const typeWriter = () => {
+                    if (i < text.length) {
+                        heroTitle.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(typeWriter, 100);
+                    }
+                };
+                
+                setTimeout(typeWriter, 1000);
+            }
+        });
+        
+        // Add ripple animation keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
