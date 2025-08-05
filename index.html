@@ -519,6 +519,149 @@
             50% { transform: translateY(-10px); }
         }
 
+        /* Custom Confirmation Modal */
+        .confirmation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .confirmation-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirmation-modal {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            transform: scale(0.7) translateY(-50px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .confirmation-overlay.active .confirmation-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .confirmation-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--secondary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .confirmation-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #60a5fa, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .confirmation-message {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            font-size: 1.1rem;
+        }
+
+        .confirmation-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .confirmation-btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            min-width: 120px;
+        }
+
+        .confirmation-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .confirmation-btn:hover::before {
+            left: 100%;
+        }
+
+        .confirm-yes {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .confirm-yes:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .confirm-no {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+
+        .confirm-no:hover {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(239, 68, 68, 0.2);
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(99, 102, 241, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(99, 102, 241, 0);
+            }
+        }
+
         /* Responsive Design */
         @media (max-width: 1024px) {
             .app-container {
@@ -553,6 +696,14 @@
             .grid-auto-fit,
             .grid-masonry {
                 grid-template-columns: 1fr;
+            }
+
+            .confirmation-modal {
+                padding: 2rem;
+            }
+
+            .confirmation-buttons {
+                flex-direction: column;
             }
         }
 
@@ -947,6 +1098,19 @@
     <!-- Floating Action Button -->
     <a href="#home" class="fab">↑</a>
 
+    <!-- Custom Confirmation Modal -->
+    <div id="confirmationOverlay" class="confirmation-overlay">
+        <div class="confirmation-modal">
+            <div class="confirmation-icon">🔗</div>
+            <h3 class="confirmation-title" data-translate="confirm-title">Xác nhận</h3>
+            <p class="confirmation-message" data-translate="confirm-message">Bạn có muốn xem chi tiết dự án này không?</p>
+            <div class="confirmation-buttons">
+                <button id="confirmYes" class="confirmation-btn confirm-yes" data-translate="confirm-yes">Có, xem ngay</button>
+                <button id="confirmNo" class="confirmation-btn confirm-no" data-translate="confirm-no">Hủy bỏ</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Language Translation System
         const translations = {
@@ -1044,7 +1208,12 @@
                 'email-academic': 'Học tập:',
                 'email-personal': 'Cá nhân:',
                 'social-title': 'Social Media',
-                'address-title': 'Địa chỉ'
+                'address-title': 'Địa chỉ',
+                // Confirmation dialog
+                'confirm-title': 'Xác nhận',
+                'confirm-message': 'Bạn có muốn xem chi tiết dự án này không?',
+                'confirm-yes': 'Có, xem ngay',
+                'confirm-no': 'Hủy bỏ'
             },
             en: {
                 'nav-home': 'Home',
@@ -1136,7 +1305,12 @@
                 'facebook': 'Facebook: https://www.facebook.com/pham.trung.454362',
                 'address-current': 'Current: Ho Chi Minh City',  
                 'address-school': 'University: VNU-UIT, Thu Duc District',
-                'address-remote': 'Available: Remote work'
+                'address-remote': 'Available: Remote work',
+                // Confirmation dialog
+                'confirm-title': 'Confirmation',
+                'confirm-message': 'Do you want to view the details of this project?',
+                'confirm-yes': 'Yes, view now',
+                'confirm-no': 'Cancel'
             }
         };
 
@@ -1166,6 +1340,62 @@
 
             currentLanguage = lang;
             localStorage.setItem('preferredLanguage', lang);
+        }
+
+        // Custom Confirmation Dialog
+        function showConfirmationDialog(message, onConfirm) {
+            const overlay = document.getElementById('confirmationOverlay');
+            const messageElement = overlay.querySelector('[data-translate="confirm-message"]');
+            
+            // Update message if provided, otherwise use default translation
+            if (message) {
+                messageElement.textContent = message;
+            } else {
+                // Use current language translation
+                const defaultMessage = currentLanguage === 'vi' 
+                    ? 'Bạn có muốn xem chi tiết dự án này không?' 
+                    : 'Do you want to view the details of this project?';
+                messageElement.textContent = defaultMessage;
+            }
+            
+            overlay.classList.add('active');
+            
+            // Handle button clicks
+            const yesBtn = document.getElementById('confirmYes');
+            const noBtn = document.getElementById('confirmNo');
+            
+            function cleanup() {
+                overlay.classList.remove('active');
+                yesBtn.replaceWith(yesBtn.cloneNode(true));
+                noBtn.replaceWith(noBtn.cloneNode(true));
+            }
+            
+            // Refresh button references after cloning
+            const newYesBtn = document.getElementById('confirmYes');
+            const newNoBtn = document.getElementById('confirmNo');
+            
+            newYesBtn.addEventListener('click', () => {
+                cleanup();
+                onConfirm();
+            });
+            
+            newNoBtn.addEventListener('click', cleanup);
+            
+            // Close on overlay click
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    cleanup();
+                }
+            });
+            
+            // Close on Escape key
+            const escapeHandler = (e) => {
+                if (e.key === 'Escape') {
+                    cleanup();
+                    document.removeEventListener('keydown', escapeHandler);
+                }
+            };
+            document.addEventListener('keydown', escapeHandler);
         }
 
         // Advanced Navigation System
@@ -1280,13 +1510,10 @@
                     // Handle project link cards with confirmation
                     if (this.classList.contains('project-link-card')) {
                         const url = this.getAttribute('data-url');
-                        const confirmMessage = currentLanguage === 'vi' 
-                            ? 'Bạn có muốn xem chi tiết dự án này không?' 
-                            : 'Do you want to view the details of this project?';
                         
-                        if (confirm(confirmMessage)) {
+                        showConfirmationDialog(null, () => {
                             window.open(url, '_blank');
-                        }
+                        });
                         return;
                     }
                     
