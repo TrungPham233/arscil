@@ -368,6 +368,10 @@
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
+        }
+
+        /* Only clickable cards (Projects) have cursor pointer */
+        .clickable-card {
             cursor: pointer;
         }
 
@@ -794,7 +798,7 @@
                     <h2 class="section-title" data-translate="projects-title">Dự án học tập</h2>
                 </div>
                 <div class="grid-masonry">
-                    <div class="interactive-card">
+                    <div class="interactive-card clickable-card project-link-card" data-url="https://drive.google.com/drive/u/0/folders/1hDSBmSetv8iX1sjSj4TeP5bfJrgYCYwf">
                         <div class="card-header">
                             <div class="card-icon">📚</div>
                             <h3 class="card-title" data-translate="project1-title">Hệ thống Quản lý Thu Gom Rác Thải</h3>
@@ -816,7 +820,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="interactive-card">
+                    <div class="interactive-card clickable-card">
                         <div class="card-header">
                             <div class="card-icon">📈</div>
                             <h3 class="card-title" data-translate="project2-title">Phân tích Dữ liệu Bán hàng (To be continued)</h3>
@@ -838,7 +842,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="interactive-card">
+                    <div class="interactive-card clickable-card">
                         <div class="card-header">
                             <div class="card-icon">🗃️</div>
                             <h3 class="card-title" data-translate="project3-title">Thiết kế Cơ sở Dữ liệu</h3>
@@ -919,9 +923,9 @@
                             <h3 class="card-title" data-translate="social-title">Social Media</h3>
                         </div>
                         <div class="card-content">
-                            <p><strong>LinkedIn:</strong> https://www.linkedin.com/in/pham-trung-295926335</p>
-                            <p><strong>GitHub:</strong> https://github.com/Arscil</p>
-                            <p><strong>Facebook:</strong> https://www.facebook.com/pham.trung.454362</p>
+                            <p><strong>LinkedIn:</strong><a href="https://www.linkedin.com/in/pham-trung-295926335"> Phạm Trung</a></p>
+                            <p><strong>GitHub:</strong> <a href="https://github.com/Arscil">Pham Duc Trung</a></p>
+                            <p><strong>Facebook:</strong> <a href="https://www.facebook.com/pham.trung.454362">Pham Trung</a></p>
                         </div>
                     </div>
                     <div class="interactive-card">
@@ -1262,9 +1266,31 @@
                 card.addEventListener('mouseleave', function() {
                     this.style.transform = 'translateY(0) rotateX(0) rotateY(0)';
                 });
+            });
+            
+            // Add ripple effect on click only for clickable cards (Projects section) without links
+            const clickableCards = document.querySelectorAll('.clickable-card');
+            clickableCards.forEach(card => {
+                // Skip cards that are wrapped in links
+                if (card.closest('a')) {
+                    return;
+                }
                 
-                // Add ripple effect on click
                 card.addEventListener('click', function(e) {
+                    // Handle project link cards with confirmation
+                    if (this.classList.contains('project-link-card')) {
+                        const url = this.getAttribute('data-url');
+                        const confirmMessage = currentLanguage === 'vi' 
+                            ? 'Bạn có muốn xem chi tiết dự án này không?' 
+                            : 'Do you want to view the details of this project?';
+                        
+                        if (confirm(confirmMessage)) {
+                            window.open(url, '_blank');
+                        }
+                        return;
+                    }
+                    
+                    // Original ripple effect for other cards
                     const ripple = document.createElement('div');
                     ripple.style.position = 'absolute';
                     ripple.style.borderRadius = '50%';
