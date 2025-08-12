@@ -723,7 +723,9 @@
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <!-- Rain Effect Canvas -->
+    <canvas id="rain-canvas" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:0;pointer-events:none;"></canvas>
+    <div class="app-container" style="position:relative;z-index:1;">
         <!-- Advanced Sidebar Navigation -->
         <nav class="sidebar">
             <div class="sidebar-logo">
@@ -1112,6 +1114,76 @@
     </div>
 
     <script>
+        // Rain Effect
+        function startRainEffect() {
+            const canvas = document.getElementById('rain-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let width = window.innerWidth;
+            let height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            function resize() {
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = width;
+                canvas.height = height;
+            }
+            window.addEventListener('resize', resize);
+
+            // Raindrop properties
+            const raindropCount = Math.floor(width / 3);
+            const raindrops = [];
+            for (let i = 0; i < raindropCount; i++) {
+                raindrops.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    l: 10 + Math.random() * 18,
+                    xs: -0.5 + Math.random(),
+                    ys: 4 + Math.random() * 6,
+                    opacity: 0.1 + Math.random() * 0.3
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.save();
+                ctx.globalAlpha = 0.7;
+                for (let i = 0; i < raindropCount; i++) {
+                    const r = raindrops[i];
+                    ctx.beginPath();
+                    ctx.moveTo(r.x, r.y);
+                    ctx.lineTo(r.x + r.xs * r.l, r.y + r.l);
+                    ctx.strokeStyle = `rgba(180,200,255,${r.opacity})`;
+                    ctx.lineWidth = 1.2;
+                    ctx.stroke();
+                }
+                ctx.restore();
+                move();
+            }
+
+            function move() {
+                for (let i = 0; i < raindropCount; i++) {
+                    const r = raindrops[i];
+                    r.x += r.xs;
+                    r.y += r.ys;
+                    if (r.y > height || r.x < 0 || r.x > width) {
+                        r.x = Math.random() * width;
+                        r.y = -20;
+                    }
+                }
+            }
+
+            function loop() {
+                draw();
+                requestAnimationFrame(loop);
+            }
+            loop();
+        }
+
+        document.addEventListener('DOMContentLoaded', startRainEffect);
+
         // Language Translation System
         const translations = {
             vi: {
